@@ -1,0 +1,24 @@
+{
+    "name": "nilayvy/module-products-in-range",
+    "type": "magento2-module",
+    "version": "0.0.1",
+    "homepage": "https://github.com/nilayvy/products-in-range",
+    "description": "Module for product search by price in customer account.",
+    "authors":[
+        {
+            "name": "Nilay Vy"
+        }
+    ],
+    "require": {
+        "php": "8.1.2|8.2",
+        "magento/framework": "100.1.*"
+    },
+    "autoload": {
+      "files": [
+          "registration.php"
+      ],
+      "psr-4": {
+          "NilayVy\\ProductsInRange\\": ""
+      }
+    }
+}

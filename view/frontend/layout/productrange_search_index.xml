@@ -5,12 +5,16 @@
  * @package NilayVy\ProductsInRange
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
     <body>
         <referenceContainer name="content">
-            <block class="NilayVy\ProductsInRange\Block\Search\Grid" name="products.range.grid" template="account/search/grid.phtml" cacheable="false"/>
-            <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="account/link/back.phtml" cacheable="false"/>
+            <block
+                class="NilayVy\ProductsInRange\Block\Search\Grid"
+                name="products.range.grid"
+                template="account/search/grid.phtml"
+                cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

@@ -1,3 +1,6 @@
+<?php
+/** @var Nilay\ProductsInRange\Block\Search\Grid $block */
+?>
 <p class="cms-content-important">
   <?= $block->escapeHtml(__('Search Products')); ?>
 </p>
@@ -76,7 +79,8 @@
                 <th scope="col" class="col date"><?= $block->escapeHtml(__('SKU')) ?></th>
                 <th scope="col" class="col shipping"><?= $block->escapeHtml(__('Name')) ?></th>
                 <th scope="col" class="col total"><?= $block->escapeHtml(__('Qty In Stock')) ?></th>
-                <th scope="col" class="col status"><?= $block->escapeHtml(__('Price')) ?></th>
+                <th scope="col" class="col price"><?= $block->escapeHtml(__('Price')) ?></th>
+                <th scope="col" class="col final_price"><?= $block->escapeHtml(__('Special Price')) ?></th>
                 <th scope="col" class="col actions"><?= $block->escapeHtml(__('Link')) ?></th>
             </tr>
         </thead>

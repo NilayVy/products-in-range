@@ -1,8 +1,18 @@
-# ProductsInRange
+# Products In Range
+Magento 2 module for product search by price
 
-
-
-
+## Installation
+* Navigate to the root directory of your Magento 2 instance
+* composer require nilayvy/module-products-in-range
+```
+* Enable the module through the Magento 2 CLI and run the database upgrade
+```
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+```
+* Redeploy static assets and flush cache
+```
+bin/magento setup:static-content:deploy && bin/magento cache:flush
 
 ## How to Use
 The Products In Range module adds a new tab to the customer account section on the front end of the site. You can use this new section to search for products in the store filtered by price.

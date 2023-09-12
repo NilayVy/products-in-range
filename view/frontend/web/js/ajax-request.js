@@ -7,14 +7,14 @@ define([
     return function(config) {
         $('#products_in_range_form').on('submit', function(e) {
             e.preventDefault();
-        
+
             // Validate form
             if (!$('#products_in_range_form').validation()
                 || !$('#products_in_range_form').validation('isValid')
             ) {
               return false;
             }
-        
+
             // Load grid data
             $.ajax({
                 url: config.ajaxUrl,
@@ -30,12 +30,12 @@ define([
                 if (response.hasOwnProperty('error')) {
                     $('#validation_errors').append('<p>' + response.error + '</p>');
                 }
-        
+
                 if (response.length > 0) {
                   $('.table-wrapper.products-in-range').show();
                   $('#no_products_message').hide();
                   // Append data to table element
-                  var template = '<tr>\
+                  let template = '<tr>\
                       <td data-th="Thumbnail" class="col thumbnail">\
                           <img src="%1" name="%3" alt="%3" style="max-width:80px" />\
                       </td>\
@@ -45,8 +45,11 @@ define([
                       <td data-th="Price" class="col price">\
                        %5\
                       </td>\
+                      <td data-th="Special Price" class="col final_price">\
+                      %6\
+                      </td>\
                       <td data-th="Link" class="col link">\
-                          <a href="%6" class="action view" target="_blank">\
+                          <a href="%7" class="action view" target="_blank">\
                               <span>View Product</span>\
                           </a>\
                       </td>\
@@ -58,7 +61,8 @@ define([
                         .replace(/\%3/g, data.name)
                         .replace('%4', data.qty)
                         .replace('%5', data.price)
-                        .replace('%6', data.url)
+                          .replace('%6', data.final_price)
+                        .replace('%7', data.url)
                     );
                   });
                 } else {
@@ -66,7 +70,7 @@ define([
                   $('#no_products_message').show();
                 }
             });
-        
+
           });
     }
 

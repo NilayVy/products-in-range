@@ -5,48 +5,50 @@
  */
 namespace NilayVy\ProductsInRange\Model;
 
-use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Helper\Product;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\Pricing\Helper\Data as PricingHelper;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\UrlInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
-class ProductData extends AbstractHelper
+class ProductData
 {
     protected const PAGE_SIZE = 10;
-    protected const    CURRENT_PAGE = 1;
-    
+    protected const CURRENT_PAGE = 1;
+
     /** @var CollectionFactory */
-    protected $_productCollectionFactory;
+    protected CollectionFactory $_productCollectionFactory;
 
     /** @var Magento\Catalog\Model\ResourceModel\Product\Collection */
     protected $_productCollection;
 
     /** @var Product */
-    protected $_productHelper;
+    protected Product $_productHelper;
 
     /** @var StoreManagerInterface */
-    protected $_storeManager;
+    protected StoreManagerInterface $_storeManager;
 
     /** @var Visibility */
-    protected $_productVisibility;
+    protected Visibility $_productVisibility;
 
     /** @var PricingHelper */
-    protected $_pricingHelper;
+    protected PricingHelper $_pricingHelper;
 
     /** @var float */
-    protected $_minPrice;
+    protected float $_minPrice;
 
     /** @var float */
-    protected $_maxPrice;
+    protected float $_maxPrice;
 
     /** @var string */
-    protected $_sortBy;
+    protected string $_sortBy;
 
     /**
      * @param Context $context
@@ -70,7 +72,6 @@ class ProductData extends AbstractHelper
         $this->_productVisibility = $_productVisibility;
         $this->_pricingHelper = $_pricingHelper;
         $this->_sortBy = Select::SQL_ASC;
-        parent::__construct($context);
     }
 
     /**
@@ -79,7 +80,7 @@ class ProductData extends AbstractHelper
      * @param array $values
      * @return $this
      */
-    public function setPriceRange(array $values)
+    public function setPriceRange(array $values): static
     {
         if (isset($values['min_price'])) {
             $this->_minPrice = (int) $values['min_price'];
@@ -97,7 +98,7 @@ class ProductData extends AbstractHelper
      * @param string $value
      * @return $this
      */
-    public function setSortBy(string $value)
+    public function setSortBy(string $value): static
     {
         switch ($value) {
             case 'asc':
@@ -115,13 +116,17 @@ class ProductData extends AbstractHelper
      * Get product collection filtered by price
      *
      * @param boolean $toArray
-     * @return Magento\Catalog\Model\ResourceModel\Product\Collection|array
+     * @return Collection|array
+     * @throws NoSuchEntityException|LocalizedException
      */
-    public function getProductCollection($toArray = true)
+    public function getProductCollection(bool $toArray = true): Collection|array
     {
-      
         $_productCollection = $this->_productCollectionFactory->create();
-        $_productCollection->addFieldToFilter('price', [
+        $_productCollection->addAttributeToSelect('name')
+            ->addAttributeToSelect('thumbnail')
+            ->addAttributeToSelect('*')->addFinalPrice()
+            ->addAttributeToFilter('status', Status::STATUS_ENABLED)
+            ->addFieldToFilter('price', [
           'from' => $this->_minPrice,
           'to' => $this->_maxPrice
         ])
@@ -139,7 +144,7 @@ class ProductData extends AbstractHelper
         ->setPageSize(self::PAGE_SIZE)
         ->setCurPage(self::CURRENT_PAGE);
         $this->_productCollection = $_productCollection;
-      
+
         if ($toArray) {
             return $this->productArray();
         } else {
@@ -151,11 +156,14 @@ class ProductData extends AbstractHelper
      * Extract data from product collection to array
      *
      * @return array
+     * @throws NoSuchEntityException
      */
-    protected function productArray()
+    protected function productArray(): array
     {
         $productArray = [];
         foreach ($this->_productCollection as $product) {
+           // echo "<pre>";
+            //print_r($product->getData());exit;
             $productData = [
               'thumbnail' => $this->_storeManager->getStore()
                   ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA)
@@ -163,8 +171,13 @@ class ProductData extends AbstractHelper
               'sku' => $product->getSku(),
               'name' => $product->getName(),
               'qty' => (int)(($product->getQty()) ? $product->getQty() : 0),
-              'price' => $this->_pricingHelper->currency(
+              'final_price' => $this->_pricingHelper->currency(
                   $product->getFinalPrice(),
+                  true,
+                  false
+              ),
+              'price' => $this->_pricingHelper->currency(
+                  $product->getData('price'),
                   true,
                   false
               ),
@@ -172,6 +185,7 @@ class ProductData extends AbstractHelper
             ];
             $productArray[] = $productData;
         }
+
         return $productArray;
     }
 }

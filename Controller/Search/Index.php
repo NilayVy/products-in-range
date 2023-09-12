@@ -1,39 +1,42 @@
 <?php
 /**
- * @author Nilay
+ * @author
  * @package NilayVy\ProductsInRange
  */
 namespace NilayVy\ProductsInRange\Controller\Search;
 
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Response\RedirectInterface;
 
-class Index extends Action
+class Index implements HttpGetActionInterface
 {
     /** @var PageFactory */
-    protected $_resultPageFactory;
+    protected PageFactory $_resultPageFactory;
+
+    /** @var RedirectInterface */
+    protected RedirectInterface $_redirect;
 
     /**
-     * @param Context $context
      * @param PageFactory $_resultPageFactory
+     * @param RedirectInterface $_redirect
      */
     public function __construct(
-        Context $context,
-        PageFactory $_resultPageFactory
+        PageFactory $_resultPageFactory,
+        RedirectInterface $_redirect
     ) {
         $this->_resultPageFactory = $_resultPageFactory;
-        parent::__construct($context);
+        $this->_redirect = $_redirect;
     }
 
     /**
-     * "Products in Range" search grid page
+     * Products in Range" search grid page
      *
-     * @return \Magento\Framework\View\Result\Page
+     * @return Page
      */
-    public function execute()
+    public function execute(): Page
     {
-      /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->_resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->set(__('Search Products'));
 

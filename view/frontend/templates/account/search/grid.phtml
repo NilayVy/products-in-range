@@ -1,0 +1,96 @@
+<p class="cms-content-important">
+  <?= $block->escapeHtml(__('Search Products')); ?>
+</p>
+<form class="form products-in-range" id="products_in_range_form" data-mage-init='{
+    "validation":{
+        "rules": {
+            "min_price": {
+                "required": true,
+        "validate-currency-dollar": true,
+        "validate-greater-than-zero": true
+            },
+      "max_price": {
+                "required": true,
+        "validate-currency-dollar": true,
+        "validate-greater-than-zero": true,
+        "validate-price-range": true
+            },
+      "sort_by": {
+        "validate-sort-by": true
+      }
+        }
+    }
+}'>
+  <fieldset class="fieldset">
+    <div class="field min-price">
+        <label class="label" for="min_price" data-role="min-price-label">
+            <span><?= $block->escapeHtml(__('Min Price')); ?></span>
+        </label>
+        <div class="control">
+            <input id="min_price"
+                   name="min_price"
+                   type="text"
+                   class="input-text"
+                   placeholder="<?= $block->escapeHtml(__('Minimum price')); ?>" />
+        </div>
+    </div>
+    <div class="field max-price">
+        <label class="label" for="max_price" data-role="max-price-label">
+            <span><?= $block->escapeHtml(__('Max Price')); ?></span>
+        </label>
+        <div class="control">
+            <input id="max_price"
+                   name="max_price"
+                   type="text"
+                   class="input-text"
+                   placeholder="<?= $block->escapeHtml(__('Maximum price')); ?>" />
+        </div>
+    </div>
+    <div class="field sort">
+        <label class="label" for="sort_by" data-role="sort-label">
+            <span><?= $block->escapeHtml(__('Sort By Price')); ?></span>
+        </label>
+        <div class="control">
+          <select class="select" name="sort_by" id="sort_by">
+            <option value="asc"><?= $block->escapeHtml(__('Ascending')); ?></option>
+            <option value="desc"><?= $block->escapeHtml(__('Descending')); ?></option>
+          </select>
+        </div>
+    </div>
+  </fieldset>
+  <div class="actions">
+      <button type="submit"
+              title="<?= $block->escapeHtml(__('Search')) ?>"
+              class="action submit primary">
+          <span><?= $block->escapeHtml(__('Search')); ?></span>
+      </button>
+  </div>
+</form>
+<div id="validation_errors" class="mage-error block"></div>
+<div class="table-wrapper products-in-range" style="display: none;">
+    <table class="data table table-products-in-range" id="products-in-range-table">
+        <caption class="table-caption"><?= $block->escapeHtml(__('Products')) ?></caption>
+        <thead>
+            <tr>
+                <th scope="col" class="col id"><?= $block->escapeHtml(__('Thumbnail')) ?></th>
+                <th scope="col" class="col date"><?= $block->escapeHtml(__('SKU')) ?></th>
+                <th scope="col" class="col shipping"><?= $block->escapeHtml(__('Name')) ?></th>
+                <th scope="col" class="col total"><?= $block->escapeHtml(__('Qty In Stock')) ?></th>
+                <th scope="col" class="col status"><?= $block->escapeHtml(__('Price')) ?></th>
+                <th scope="col" class="col actions"><?= $block->escapeHtml(__('Link')) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Nilay_ProductsInRange/js/ajax-request" : {
+              "ajaxUrl" : "<?= /* @noEscape */ $block->getAjaxUrl(); ?>"
+            }
+        }
+    }
+</script>

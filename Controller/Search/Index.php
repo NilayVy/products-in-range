@@ -1,9 +1,9 @@
 <?php
 /**
- * @author
- * @package Nilay\ProductsInRange
+ * @author Nilay
+ * @package NilayVy\ProductsInRange
  */
-namespace Nilay\ProductsInRange\Controller\Search;
+namespace NilayVy\ProductsInRange\Controller\Search;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;

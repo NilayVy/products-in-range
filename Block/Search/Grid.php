@@ -1,9 +1,9 @@
 <?php
 /**
  * @author Nilay
- * @package Nilay\ProductsInRange
+ * @package NilayVy\ProductsInRange
  */
-namespace Nilay\ProductsInRange\Block\Search;
+namespace NilayVy\ProductsInRange\Block\Search;
 
 use Magento\Framework\View\Element\Template;
 

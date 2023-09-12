@@ -1,7 +1,7 @@
 var config = {
     "map": {
       "*": {
-        validation: 'Nilay_ProductsInRange/js/search-validator'
+        validation: 'NilayVy_ProductsInRange/js/search-validator'
       }
     }
   };

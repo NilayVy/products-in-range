@@ -1,11 +1,11 @@
 <?php
 /**
  * @author Nilay
- * @package Nilay\ProductsInRange
+ * @package NilayVy\ProductsInRange
  */
-namespace Nilay\ProductsInRange\Controller\Ajax;
+namespace NilayVy\ProductsInRange\Controller\Ajax;
 
-use Nilay\ProductsInRange\Model\ProductData;
+use NilayVy\ProductsInRange\Model\ProductData;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -47,27 +47,15 @@ class Index extends Action
      * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
-    {   
+    {
         $resultJson = $this->_resultJsonFactory->create();
-     
-        if (!$this->validateFormData()) {
+        
+        if (!is_numeric($this->getRequest()->getPost('min_price')) ||
+         !is_numeric($this->getRequest()->getPost('max_price'))) {
+            return $resultJson->setData([
+                'error' => 'Min and max price are reuired field. Price should be numeric.'
+            ]);
             
-            if(!$this->numberValidate($this->getRequest()->getParam('min_price')) || $this->getRequest()->getParam('min_price')==""){
-                return $resultJson->setData([
-                    'error' => 'Min price is required field and should be valid formate'
-                ]);
-            }
-
-            if(!$this->numberValidate($this->getRequest()->getParam('max_price')) || $this->getRequest()->getParam('max_price')==""){
-                return $resultJson->setData([
-                    'error' => 'Max Price is required field and should be valid formate'
-                ]);
-            }
-            if($this->getRequest()->getParam('sort_by')==""){
-                return $resultJson->setData([
-                    'error' => 'Short by is required field'
-                ]);
-            }
         }
 
         if (!$this->validateFormData()) {
@@ -90,8 +78,10 @@ class Index extends Action
           !$this->getRequest()->getPost('max_price')) {
             return false;
         }
-        $this->_minPrice = (float) $this->getRequest()->getPost('min_price');
-        $this->_maxPrice = (float) $this->getRequest()->getPost('max_price');
+
+        $this->_minPrice = (int) $this->getRequest()->getPost('min_price');
+        $this->_maxPrice = (int) $this->getRequest()->getPost('max_price');
+
         if ($this->_maxPrice < $this->_minPrice) {
             return false;
         }
@@ -115,10 +105,5 @@ class Index extends Action
         ])->setSortBy(
             $this->getRequest()->getPost('sort_by')
         )->getProductCollection();
-    }
-
-    private function numberValidate($value)
-    {
-        return preg_match('/^([0-9]+)$/', $value);
     }
 }

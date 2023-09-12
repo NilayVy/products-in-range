@@ -1,9 +1,9 @@
 <?php
 /**
  * @author Nilay
- * @package Nilay\ProductsInRange
+ * @package NilayVy\ProductsInRange
  */
-namespace Nilay\ProductsInRange\Model;
+namespace NilayVy\ProductsInRange\Model;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -82,10 +82,10 @@ class ProductData extends AbstractHelper
     public function setPriceRange(array $values)
     {
         if (isset($values['min_price'])) {
-            $this->_minPrice = (float) $values['min_price'];
+            $this->_minPrice = (int) $values['min_price'];
         }
         if (isset($values['max_price'])) {
-            $this->_maxPrice = (float) $values['max_price'];
+            $this->_maxPrice = (int) $values['max_price'];
         }
         $this->_productCollection = null;
         return $this;

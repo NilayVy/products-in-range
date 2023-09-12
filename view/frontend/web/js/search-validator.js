@@ -1,6 +1,6 @@
 /**
  * @author Nilay
- * @package Nilay\ProductsInRange
+ * @package NilayVy\ProductsInRange
  */
 require([
 'jquery',

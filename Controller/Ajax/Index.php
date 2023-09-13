@@ -42,8 +42,6 @@ class Index implements HttpGetActionInterface, HttpPostActionInterface
         ProductData $_productData
     ) {
         $this->_request = $_request;
-        $this->_minPrice = (int) $this->_request->getParam('min_price') ?? null;
-        $this->_maxPrice = (int) $this->_request->getParam('max_price') ?? null;
         $this->_resultJsonFactory = $_resultJsonFactory;
         $this->_productData = $_productData;
     }
@@ -57,8 +55,8 @@ class Index implements HttpGetActionInterface, HttpPostActionInterface
     {
         $resultJson = $this->_resultJsonFactory->create();
 
-        if (!is_numeric($this->_minPrice) ||
-         !is_numeric($this->_maxPrice)) {
+        if (!is_numeric($this->_request->getParam('min_price')) ||
+         !is_numeric($this->_request->getParam('max_price'))) {
             return $resultJson->setData([
                 'error' => 'Min and max price are reuired field. Price should be numeric.'
             ]);
@@ -86,11 +84,12 @@ class Index implements HttpGetActionInterface, HttpPostActionInterface
      */
     protected function validateFormData()
     {
-        if (!$this->_minPrice ||
-          !$this->_maxPrice) {
+        if (!$this->_request->getParam('min_price') ||
+          !$this->_request->getParam('max_price')) {
             return false;
         }
-
+        $this->_minPrice = (int) $this->_request->getParam('min_price');
+        $this->_maxPrice = (int) $this->_request->getParam('max_price');
         if ($this->_maxPrice < $this->_minPrice) {
             return false;
         }
